@@ -76,7 +76,7 @@ app.get("*", (req, res) => {
 app.use(errorMiddleware);
 
 app.listen(port, () => {
-  loadProxies()
+  // loadProxies()
   startBrowser();
   console.log('Server is working on Port:' + port + ' in ' + envMode + ' Mode.\n ➜  Local:   http://localhost:' + port + '/')
 

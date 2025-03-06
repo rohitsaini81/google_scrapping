@@ -1,21 +1,24 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router';
-import "./Utils.css"
+import { RouterLink, RouterView } from "vue-router";
+import "./Utils.css";
 </script>
 
 <template>
   <div class="parent flex coulmn body-size">
-    <nav>
-    <RouterLink to="/">Home</RouterLink>
-    <RouterLink to="/about">About</RouterLink>
-  </nav>
-  <RouterView />
+    <nav class="flex nav">
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/about">Saved Inventory</RouterLink>
+    </nav>
+    <RouterView />
+    <!-- retrieve -->
   </div>
 </template>
 
-
-
 <style scoped>
+.nav {
+  width: 100%;
+  justify-content: space-between;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

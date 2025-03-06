@@ -30,8 +30,8 @@ routerp.post("/scrape", async (req, res) => {
 
         // console.log(_data," by pupet")
 
-        save_data(searchQuery,_data)
-        if(process.env.proxy_file){rotationProxy()}
+        // save_data(searchQuery,_data)
+        // if(process.env.proxy_file){rotationProxy()}
         res.json({ status: "success", _data });
     } catch (error) {
         console.error("Error during scraping:", error);

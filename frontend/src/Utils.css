@@ -6,7 +6,7 @@
     text-decoration: none;
     color: white;
     outline: none;
-    border: 1px solid #0e0e0e9d;
+    /* border: 1px solid white; */
     border-radius: 10px;
 }
 
@@ -27,7 +27,7 @@ button:hover::before{
 /* width: 100%;
 } */
 button:hover {
-    background-color: greenyellow;
+    background-color: green;
 }
 
 .body-size {
@@ -69,16 +69,18 @@ button:hover {
 
 label {
     font-weight: bold;
-    color: black;
+    color: white;
 }
 
 input,#input {
-    background-color: white;
-    color: black;
+    /* background-color: white; */
+    color: white;
     padding-left: 2px;
     padding-right: 2px;
     text-align: center;
     width: 11rem;
+    border: 1px solid white;
+    border-radius: 2px;
 
 }
 
@@ -92,6 +94,10 @@ input,#input {
     width: 10rem;
     text-align: start;
 }
+.button{
+    margin-top: 8px;
+    margin-right: 5px;
+}
 li{
     margin-top: 8px;
 }
@@ -101,6 +107,14 @@ img{
 }
 
 .image{
-    width: 8rem;
-    height: 8rem;
+    width: 5rem;
+    height: 5rem;
+}
+
+#input-messages{
+    display: none;
+}
+.scroll-y{
+    overflow-y: scroll;
+    height: 50vw;
 }
