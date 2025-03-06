@@ -17,6 +17,12 @@
         />
       </div>
       <v-btn color="primary" @click="HandleRetrieve">Retrieve Data</v-btn>
+
+      <hr />
+      <hr />
+      <hr />
+      <ListItem />
+      <ListItem v-for="(obj, index) in Data" :key="index" :item="obj" />
     </v-main>
 
     <v-snackbar v-model="show" timeout="3000">
@@ -29,6 +35,8 @@
 </template>
 
 <script>
+import ListItem from "../components/ListItem.vue";
+
 import { openDB } from "idb";
 import CollapListVue from "../components/CollapList.vue";
 
@@ -46,7 +54,7 @@ export default {
       this.show = true;
       console.log("Retrieving data...");
       const data = await this.getData();
-      console.log(data)
+      console.log(data);
     },
 
     async getData() {
