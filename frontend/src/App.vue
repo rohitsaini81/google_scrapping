@@ -7,7 +7,11 @@ import "./Utils.css";
   <div class="parent flex coulmn body-size">
     <nav class="flex nav">
       <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">Saved Inventory</RouterLink>
+      <div class="flex">
+        <RouterLink to="/about">Saved Inventory</RouterLink>
+        <br style="margin-right: 5px;" />
+        <RouterLink to="/setting">Settings</RouterLink>
+      </div>
     </nav>
     <RouterView />
     <!-- retrieve -->

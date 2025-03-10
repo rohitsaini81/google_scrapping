@@ -6,6 +6,8 @@ import {
   proxy_host,
   proxy_password,
   proxy_username,
+  proxy_file,
+  Print
 } from "../app.js";
 import { proxies } from "./File.js";
 
@@ -14,17 +16,19 @@ export let browser, page;
 export const startBrowser = async (__proxy) => {
   puppeteer.use(StealthPlugin());
 
-  if (proxy_host != "") {
+  if (proxy_host.length>0) {
     console.log("proxy host : ", __proxy);
     browser = await puppeteer.launch({
       headless: true,
-      args: [`--proxy-server=${__proxy}`],
-      // args: [`--proxy-server=${userProxy}`,'--ignore-certificate-errors']
+      args: [`--proxy-server=${proxy_host}`],
+      // args: [`--proxy-server=${__proxy}`,'--ignore-certificate-errors']
     });
-  } else {
+  } else if(proxy_file){
     browser = await puppeteer.launch({
       headless: true,
-      args: [`--proxy-server=${proxy_host}`],
+      // args: [`--proxy-server=${proxy_host}`],
+      args: [`--proxy-server=${__proxy}`,'--ignore-certificate-errors']
+
     });
   }
 
@@ -190,13 +194,21 @@ export const rotationProxy = async () => {
     console.log("No proxies found!");
     return;
   }
-
+  
   const proxy = proxies[currentProxyIndex];
+  console.log(proxy)
   browser = await startBrowser(proxy);
-
+  
   currentProxyIndex = (currentProxyIndex + 1) % proxies.length; // Rotate index
+  Print("Proxy rotated")
+  return proxy;
 };
 
+
+
+const updateProxy = (proxy)=>{
+
+}
 // const validateCookies=async()=>{
 //     try {
 //         await page.waitForSelector('button[aria-label="Tout accepter"]', { timeout: 5000 });

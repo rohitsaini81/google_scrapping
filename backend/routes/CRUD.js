@@ -1,9 +1,12 @@
+import axios from 'axios';
 import express from 'express'
+import read from '../models/RW.js';
 const router = express.Router();
 
 router.get('/api/',async(req,res)=>{
-    const data = await fetch('https://dummyjson.com/carts')
-    .then(res => res.json());
+    // const data = await fetch('https://dummyjson.com/carts')
+    const data = await read()
+    // .then(res => res.json());
 
     res.send(data)
 })

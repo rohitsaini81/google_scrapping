@@ -3,8 +3,8 @@
   <v-app>
     <v-main class="inline-center" style="width: 88vw">
       <v-container>
-        <h1>About Page</h1>
-        <p>This is the About Page.</p>
+        <h1>Setting Page</h1>
+        <p>This .</p>
       </v-container>
 
       <div class="flex">

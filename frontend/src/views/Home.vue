@@ -19,16 +19,22 @@
             <!-- <p>You typed: {{ Name }}</p> -->
           </div>
           <div class="input">
-            <label for="title">Price Range</label>
-            <!-- <input name="pricefrom" type="range" /> -->
-            <v-slider
-              id="input"
-              v-model="sliderValue"
-              min="100"
-              max="10000"
-              step="1"
-              thumb-label
-            ></v-slider>
+            <label for="title" style="height: 50px;padding: 1em;">Price Range</label>
+            <!-- <template> -->
+              <v-container>
+                <v-range-slider
+                  v-model="range"
+                  :min="100"
+                  :max="10000"
+                  step="1"
+                  thumb-label
+                  track-color="blue"
+                ></v-range-slider>
+
+                <!-- <p>Min: {{ range[0] }}</p> -->
+                <!-- <p>Max: {{ range[1] }}</p> -->
+              </v-container>
+            <!-- </template> -->
           </div>
           <div class="input">
             <label for="title">Brand Name</label
@@ -121,68 +127,75 @@ export default {
     ListItem,
   },
 
- methods: {
-  async _Fetch() {
-    // console.log(this.Title);
-    // console.log(this.Brand);
-    // console.log(this.sliderValue);
-    // console.log(this.Country);
-    
-    try {
-      if (ListItems.value != null && ListItems.value.children.length > 0) {
-        console.log("SOMETHING WENT WRONG");
-        return;
+  methods: {
+    async _Fetch() {
+      // console.log(this.Title);
+      // console.log(this.Brand);
+      // console.log(this.sliderValue);
+      // console.log(this.Country);
+
+      try {
+        if (ListItems.value != null && ListItems.value.children.length > 0) {
+          console.log("SOMETHING WENT WRONG");
+          return;
+        }
+        if (this.Title === "") {
+          console.log("Please enter category type");
+          return;
+        }
+        const res = await axios.post("http://localhost:4000/scrape/", {
+          searchQuery: this.Title,
+          minPrice: this.range[0],
+          maxPrice: this.range[1],
+          brand: this.Brand,
+        });
+        this.Data = res.data._data;
+        if (this.Data.length <= 0) {
+          console.log("error 404");
+          return;
+        }
+
+        // Save data in IndexedDB
+        await this.saveData(this.Data, this.Title);
+      } catch (e) {
+        console.log("Error:", e);
       }
-      if (this.Title === "") {
-        console.log("Please enter category type");
-        return;
-      }
 
-      const res = await axios.get(`http://localhost:4000/scrape/${this.Title}`);
-      this.Data = res.data._data;
-      
-      // Save data in IndexedDB
-      await this.saveData(this.Data, this.Title);
-
-    } catch (e) {
-      console.log("Error:", e);
-    }
-
-    this.Title = "";
-    this.Brand = "";
-    this.sliderValue = "";
-    this.Country = "";
-  },
-
-async saveData(Data, Title) {
-  console.log("Saving Data:", Data);
-
-  // ✅ Convert Vue Proxy to plain object (deep copy)
-  const plainData = JSON.parse(JSON.stringify(Data));
-
-  const db = await openDB("myDatabase", 2, {
-    upgrade(db) {
-      if (!db.objectStoreNames.contains("categories")) {
-        console.log("Creating object store: categories");
-        db.createObjectStore("categories", { keyPath: "id", autoIncrement: true });
-      }
+      this.Title = "";
+      this.Brand = "";
+      this.sliderValue = "";
+      this.Country = "";
     },
-  });
 
-  if (!db.objectStoreNames.contains("categories")) {
-    console.error("Object store 'categories' not found!");
-    return;
-  }
+    async saveData(Data, Title) {
+      console.log("Saving Data:", Data);
 
-  const tx = db.transaction("categories", "readwrite");
-  const store = tx.objectStore("categories");
+      const plainData = JSON.parse(JSON.stringify(Data));
 
-  await store.add({ title: Title, data: plainData });
+      const db = await openDB("myDatabase", 2, {
+        upgrade(db) {
+          if (!db.objectStoreNames.contains("categories")) {
+            console.log("Creating object store: categories");
+            db.createObjectStore("categories", {
+              keyPath: "id",
+              autoIncrement: true,
+            });
+          }
+        },
+      });
 
-  console.log("Data saved in IndexedDB:", plainData);
-},
+      if (!db.objectStoreNames.contains("categories")) {
+        console.error("Object store 'categories' not found!");
+        return;
+      }
 
+      const tx = db.transaction("categories", "readwrite");
+      const store = tx.objectStore("categories");
 
+      await store.add({ title: Title, data: plainData });
+
+      console.log("Data saved in IndexedDB:", plainData);
+    },
 
     handleFetch() {
       this._Fetch();
@@ -195,13 +208,25 @@ async saveData(Data, Title) {
   },
   data() {
     return {
-      sliderValue: 500,
+      range: [500, 5000],
       Title: "",
       Brand: "",
       Country: "",
       Data: [],
       show: false,
     };
+  },
+  watch: {
+    range(newValue) {
+      if(newValue[0]>=newValue[1]){
+        this.range[0]-=70
+        this.range[0]*=1;
+      }
+      if(newValue[1]<=50){
+        this.range[1]+=50;
+      }
+    console.log("Slider Value:", newValue[0]," ",newValue[1]);
+    },
   },
   components: { ListItem },
 };

@@ -10,9 +10,12 @@ import cookieParser from "cookie-parser"
 import postroute from './routes/postroute.js'
 import { startBrowser } from "./models/Methods.js"
 import { loadProxies } from "./models/File.js"
+import { dbcon } from "./models/Connection.js"
+import BusyClock from "./models/BusyClock.js"
 export const  proxyFile =  "./Proxy_list.txt"
-
-
+import { Low } from "lowdb";
+import { JSONFile, JSONFilePreset } from "lowdb/node";
+export const Print = (obj)=>{console.log(obj)}
 
 const app = express();
 dotenv.config({ path: './.env', });
@@ -22,7 +25,12 @@ export const proxy_host = process.env.proxy_host;
 export const proxy_username = process.env.proxy_username;
 export const proxy_password = process.env.proxy_password;
 export const proxy_auth = process.env.proxy_auth;
+export const proxy_file = process.env.proxy_file;
 
+const db_uri = `mongodb+srv://${process.env.URI_PASS}@cluster0.8t0hk4y.mongodb.net/${process.env.DATABASE}`;
+export const db = await JSONFilePreset("../backend/lowdb/db.json", { posts: [] });
+
+dbcon(db_uri);
 app.use(express.json());
 
 
@@ -74,9 +82,12 @@ app.get("*", (req, res) => {
 });
 
 app.use(errorMiddleware);
+// const BusyTime=5000;
+// BusyClock(BusyTime)
+
 
 app.listen(port, () => {
-  // loadProxies()
+  loadProxies()
   startBrowser();
   console.log('Server is working on Port:' + port + ' in ' + envMode + ' Mode.\n ➜  Local:   http://localhost:' + port + '/')
 

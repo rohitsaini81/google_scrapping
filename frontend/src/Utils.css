@@ -54,6 +54,9 @@ button:hover {
 .inline-center {
     justify-content: center;
 }
+.coulmn{
+    flex-direction: column;
+}
 
 /* align-items: center; */
 
@@ -72,7 +75,8 @@ label {
     color: white;
 }
 
-input,#input {
+input,
+#input {
     /* background-color: white; */
     color: white;
     padding-left: 2px;
@@ -89,32 +93,39 @@ input,#input {
     display: flex;
     justify-content: space-around;
     margin-top: 8px;
+    height: 50px;
 }
-.input>label{
+
+.input>label {
     width: 10rem;
     text-align: start;
 }
-.button{
+
+.button {
     margin-top: 8px;
     margin-right: 5px;
 }
-li{
+
+li {
     margin-top: 8px;
 }
-img{
+
+img {
     height: 100%;
     width: 100%;
 }
 
-.image{
+.image {
     width: 5rem;
     height: 5rem;
 }
 
-#input-messages{
+#input-messages {
     display: none;
 }
-.scroll-y{
+
+.scroll-y {
     overflow-y: scroll;
-    height: 50vw;
+    height: 58vh;
+    width: 40vw;
 }
